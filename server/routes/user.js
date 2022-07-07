@@ -48,7 +48,7 @@ catch (err){
 
 
 try{
-    router.post('/edituser/:id', userController.edit);
+    router.post('/edituser/:id', userController.update);
 }
 catch (err){
     Sentry.captureException(err);
@@ -63,12 +63,12 @@ catch (err){
 }
 
 
-try{
-    router.get('/:id',userController.delete);
-}
-catch (err){
-    Sentry.captureException(err);
-}
+// try{
+//     router.get('/:id',userController.delete);
+// }
+// catch (err){
+//     Sentry.captureException(err);
+// }
 finally{
     transaction.finish();
 }

@@ -24,6 +24,7 @@ exports.view = (req, res) => {
     } else {
       console.log(err);
       Sentry.captureException(err);
+      Sentry.captureMessage("View error", "fatal");
     }
     console.log('The data from user table: \n', rows);
   });
@@ -44,6 +45,7 @@ exports.find = (req, res) => {
     } else {
       console.log(err);
       Sentry.captureException(err);
+      // Sentry.captureMessage("Find error", "fatal");
     }
     console.log('The data from user table: \n', rows);
   });
@@ -61,13 +63,12 @@ exports.create = (req, res) => {
   // User the connection
   connection.query('INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comments = ?', [first_name, last_name, email, phone, comments], (err, rows) => {
     if (!err) {
-      try{res.render('add-user', { alert: 'User added successfully.' });}
-      catch (e){
-        Sentry.captureException(e);
-      }
+      res.render('add-user', { alert: 'User added successfully.' });
+      
     } else {
       console.log(err);
       Sentry.captureException(err);
+      Sentry.captureMessage("Insert error", "fatal");
     }
     console.log('The data from user table: \n', rows);
   });
@@ -86,6 +87,7 @@ exports.edit = (req, res) => {
     } else {
       console.log(err);
       Sentry.captureException(err);
+      // Sentry.captureMessage("Edit user error", "fatal");
     }
     console.log('The data from user table: \n', rows);
   });
@@ -117,45 +119,45 @@ exports.update = (req, res) => {
     } else {
       console.log(err);
       Sentry.captureException(err);
+      // Sentry.captureMessage("Update user error", "fatal");
     }
     console.log('The data from user table: \n', rows);
   });
 }
 
 // Delete User
-exports.delete = (req, res) => {
+// exports.delete = (req, res) => {
 
-  // Delete a record
+//   // Delete a record
 
-  // User the connection
-  // connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (err, rows) => {
+//   // User the connection
+//   // connection.query('DELETE FROM user WHERE id = ?', [req.params.id], (err, rows) => {
 
-  //   if(!err) {
-  //     res.redirect('/');
-  //   } else {
-  //     console.log(err);
-  //   }
-  //   console.log('The data from user table: \n', rows);
+//   //   if(!err) {
+//   //     res.redirect('/');
+//   //   } else {
+//   //     console.log(err);
+//   //   }
+//   //   console.log('The data from user table: \n', rows);
 
-  // });
+//   // });
 
-  // Hide a record
-  const rm = "removed";
-  connection.query('UPDATE user SET status = ? WHERE id = ?', [rm, req.params.id], (err, rows) => {
-    if (!err) {
-      let removedUser = encodeURIComponent('User successeflly removed.');
-      res.redirect('/?removed=' + removedUser);
-      // catch (e){
-        // Sentry.captureException(e);
-      // }
-    } else {
-      console.log(err);
-      Sentry.captureException(err);
-    }
-    console.log('The data from uer table are: \n', rows);
-  });
+//   // Hide a record
+//   connection.query('UPDATE user SET status = "removed" WHERE id = ?', [req.params.id], (err, rows) => {
+//     if (!err) {
+//       let removedUser = encodeURIComponent('User successeflly removed.');
+//       res.redirect('/?removed=' + removedUser);
+//       // catch (e){
+//         // Sentry.captureException(e);
+//       // }
+//     } else {
+//       console.log(err);
+//       Sentry.captureException(err);
+//     }
+//     console.log('The data from user table are: \n', rows);
+//   });
 
-}
+// }
 
 // View Users
 exports.viewall = (req, res) => {
